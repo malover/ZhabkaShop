@@ -7,7 +7,12 @@
         public int ProductId { get; set; }
         public int OrderId { get; set; }
 
+
+        #region NavigationProperty
         public Product? Product { get; set; }
         public Order Order { get; set; }
+
+        #endregion
+
     }
 }
