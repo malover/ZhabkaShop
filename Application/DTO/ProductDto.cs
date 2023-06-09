@@ -1,4 +1,4 @@
-﻿namespace Persistence.DTO
+﻿namespace Application.DTO
 {
     public class ProductDto
     {

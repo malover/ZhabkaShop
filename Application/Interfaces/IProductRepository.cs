@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.DTO;
+using Domain.Models;
 
 namespace Application.Interfaces
 {
@@ -6,8 +7,8 @@ namespace Application.Interfaces
     {
         public Task<List<Product>> GetAllAsync();
         public Task<Product?> GetProductByIdAsync(int id);
-        public Task AddProductAsync(Product product);
-        public Task UpdateProductAsync(Product product);
+        public Task AddProductAsync(ProductDto product);
+        public Task UpdateProductAsync(ProductDto product);
         public Task DeleteProductAsync(int id);
     }
 }

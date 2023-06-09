@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO;
+using Application.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,17 +26,25 @@ namespace Persistence.Repositories
             return null;
         }
 
-        public async Task AddProductAsync(Product product)
+        public async Task AddProductAsync(ProductDto prod)
         {
+            var product = new Product
+            {
+                Name = prod.Name,
+                Quantity = prod.Quantity,
+                Price = prod.Price
+            };
             await _context.AddAsync(product);
         }
 
-        public async Task UpdateProductAsync(Product prod)
+        public async Task UpdateProductAsync(ProductDto prod)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == prod.ProductId);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == prod.Name);
             if (product is not null)
             {
-                _context.Entry(product).CurrentValues.SetValues(prod);
+                product.Name = prod.Name;
+                product.Quantity = prod.Quantity;
+                product.Price = prod.Price;
             }
         }
 

@@ -1,10 +1,11 @@
-﻿using Domain.Models;
+﻿using Application.DTO;
 
 namespace Application.Interfaces
 {
     public interface IOrderRepository
     {
-        public Task AddOrderAsync();
+        public Task<List<OrderDto>> GetAllAsync();
         public Task FulfillOrderAsync(int id);
+        public Task AddOrderAsync(OrderDto order);
     }
 }

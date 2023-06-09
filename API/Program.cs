@@ -1,3 +1,4 @@
+using Application.DTO;
 using Persistence.ServiceExtensions;
 using Application.Interfaces;
 using Domain.Models;
@@ -15,23 +16,52 @@ var app = builder.Build();
 
 #region MinimalApi
 
-app.MapGet("/products/", async (IUnitOfWork unitOfWork) =>
-{
-    await unitOfWork.ProductRepository.GetAllAsync();
-    return Results.Ok();
-});
+app.MapGet("/products/", async (IUnitOfWork unitOfWork) => await unitOfWork.ProductRepository.GetAllAsync());
 
-app.MapGet("/products/{id}", async (int id, IUnitOfWork unitOfWork) =>
-{
-    await unitOfWork.ProductRepository.GetProductByIdAsync(id);
-    return Results.Ok();
-});
+app.MapGet("/products/{id}", async (int id, IUnitOfWork unitOfWork) => await unitOfWork.ProductRepository.GetProductByIdAsync(id));
 
-app.MapPost("/products/", async (Product product, IUnitOfWork unitOfWork) =>
+app.MapPost("/products/", async (ProductDto product, IUnitOfWork unitOfWork) =>
 {
     await unitOfWork.ProductRepository.AddProductAsync(product);
     await unitOfWork.SaveAsync();
     return Results.Ok();
+});
+
+app.MapPut("/products/{id}", async (ProductDto product, IUnitOfWork unitOfWork) =>
+{
+    await unitOfWork.ProductRepository.UpdateProductAsync(product);
+    await unitOfWork.SaveAsync();
+    return Results.Ok();
+});
+
+app.MapDelete("/products/{id}", async (int id, IUnitOfWork unitOfWork) =>
+{
+    await unitOfWork.ProductRepository.DeleteProductAsync(id);
+    await unitOfWork.SaveAsync();
+    return Results.Ok();
+});
+
+app.MapGet("/orders/", async (IUnitOfWork unitOfWork) => await unitOfWork.OrderRepository.GetAllAsync());
+
+app.MapPost("/orders/", async (OrderDto order, IUnitOfWork unitOfWork) =>
+{
+    await unitOfWork.OrderRepository.AddOrderAsync(order);
+    await unitOfWork.SaveAsync();
+    return Results.Ok();
+});
+
+app.MapPut("/orders/fulfill", async (int id, IUnitOfWork unitOfWork) =>
+{
+    try
+    {
+        await unitOfWork.OrderRepository.FulfillOrderAsync(id);
+        await unitOfWork.SaveAsync();
+        return Results.Ok();
+    }
+    catch (Exception ex)
+    {
+        return Results.StatusCode(500);
+    }
 });
 
 #endregion
