@@ -83,9 +83,6 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -94,15 +91,13 @@ namespace Persistence.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("OrderId");
-
                     b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Domain.Models.OrderDetails", b =>
                 {
                     b.HasOne("Domain.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -118,16 +113,9 @@ namespace Persistence.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Domain.Models.Product", b =>
-                {
-                    b.HasOne("Domain.Models.Order", null)
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId");
-                });
-
             modelBuilder.Entity("Domain.Models.Order", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,7 +4,6 @@
     {
         public int OrderDetailsId { get; set; }
         public DateTime OrderDate { get; set; }
-        public bool IsFulfilled { get; set; }
         public int Quantity { get; set; }
         public int ProductId { get; set; }
         public int OrderId { get; set; }
