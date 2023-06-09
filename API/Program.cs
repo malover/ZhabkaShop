@@ -1,7 +1,6 @@
 using Application.DTO;
 using Persistence.ServiceExtensions;
 using Application.Interfaces;
-using Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +14,8 @@ builder.Services.RegisterRepositories();
 var app = builder.Build();
 
 #region MinimalApi
+
+app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/products/", async (IUnitOfWork unitOfWork) => await unitOfWork.ProductRepository.GetAllAsync());
 
@@ -58,7 +59,7 @@ app.MapPut("/orders/fulfill", async (int id, IUnitOfWork unitOfWork) =>
         await unitOfWork.SaveAsync();
         return Results.Ok();
     }
-    catch (Exception ex)
+    catch (Exception)
     {
         return Results.StatusCode(500);
     }
@@ -74,3 +75,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run();
+
+
+public partial class Program{}

@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using Persistence.Repositories;
 
 namespace Persistence

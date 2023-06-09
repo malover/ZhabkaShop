@@ -46,28 +46,20 @@ namespace Persistence.Repositories
             var order = await _context.Orders
                 .Include(x => x.OrderDetails)
                 .FirstOrDefaultAsync(x => x.OrderId == id);
-            try
+            if (order is not null)
             {
-                if (order is not null)
+                foreach (var od in order.OrderDetails)
                 {
-                    foreach (var od in order.OrderDetails)
+                    var product = await _context.Products.FindAsync(od.ProductId);
+                    if (product != null && product.Quantity >= od.Quantity)
                     {
-                        var product = await _context.Products.FindAsync(od.ProductId);
-                        if (product != null && product.Quantity >= od.Quantity)
-                        {
-                            product.Quantity -= od.Quantity;
-                            await _context.SaveChangesAsync();
-                        }
-                        else throw new Exception("The order cannot be " +
-                                                 $"fulfilled as there are not enough product: {product}");
+                        product.Quantity -= od.Quantity;
+                        await _context.SaveChangesAsync();
                     }
+                    else throw new Exception("The order cannot be " +
+                                             $"fulfilled as there are not enough product: {product}");
                 }
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
         }
 
         public async Task AddOrderAsync(OrderDto orderDto)
